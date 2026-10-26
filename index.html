@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OUD & AURA — Fragrance Studio</title>
+<style>
+:root{--ink:#f7f2e9;--muted:#b8afa1;--bg:#11110f;--panel:#1b1a17;--panel2:#24221d;--gold:#d7b777;--gold2:#f0d9a5;--line:#39352d;--green:#b8c7a0;--danger:#e6a09a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 80% 0%,#29251c 0%,#11110f 45%);color:var(--ink);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.6}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.wrap{max-width:1180px;margin:auto;padding:0 22px}
+.topbar{border-bottom:1px solid var(--line);position:sticky;top:0;background:#11110feF;backdrop-filter:blur(14px);z-index:10}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:76px}
+.brand{font-family:Georgia,serif;font-size:25px;letter-spacing:2px;color:var(--gold2);direction:ltr}
+.brand small{display:block;font-family:Tahoma,Arial;font-size:10px;letter-spacing:4px;color:var(--muted);text-align:center}
+.nav-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid var(--gold);background:var(--gold);color:#17140e;padding:10px 16px;border-radius:4px;font-weight:700;transition:.2s}
+.btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold2)}
+.btn.small{padding:6px 10px;font-size:13px}
+.hero{padding:70px 0 45px;display:grid;grid-template-columns:1.25fr .75fr;gap:35px;align-items:center}
+.eyebrow{color:var(--gold);letter-spacing:3px;font-size:12px;direction:ltr;text-align:right}
+.hero h1{font-family:Georgia,serif;font-size:clamp(38px,6vw,66px);line-height:1.1;font-weight:500;margin:15px 0}
+.hero h1 span{color:var(--gold2);font-style:italic}
+.hero p{color:var(--muted);max-width:620px}
+.hero-art{min-height:280px;border:1px solid #4a4030;background:linear-gradient(135deg,#272218,#151411 55%,#302718);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-art:before,.hero-art:after{content:"";position:absolute;border:1px solid #9b7c43;border-radius:50%;width:220px;height:220px;transform:rotate(-30deg)}
+.hero-art:after{width:160px;height:260px;border-radius:48%;transform:rotate(35deg)}
+.monogram{font-family:Georgia,serif;font-size:65px;color:var(--gold2);z-index:1;letter-spacing:6px}
+.hero-note{position:absolute;bottom:15px;left:18px;color:var(--muted);font-size:11px;letter-spacing:2px;direction:ltr}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:35px 0 20px}
+.section-head h2{font-family:Georgia,serif;font-weight:500;font-size:30px;margin:0}
+.section-head p{color:var(--muted);margin:0;font-size:14px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{background:transparent;border:1px solid var(--line);color:var(--muted);padding:8px 14px;border-radius:99px}
+.chip.active,.chip:hover{border-color:var(--gold);color:var(--gold2);background:#292419}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.product{background:linear-gradient(145deg,#201e19,#171613);border:1px solid var(--line);padding:20px;min-height:220px;display:flex;flex-direction:column;transition:.2s}
+.product:hover{border-color:#8d7448;transform:translateY(-3px)}
+.product .num{font:12px Georgia,serif;color:#8e7b57;direction:ltr;text-align:left}
+.product h3{font-family:Georgia,serif;font-size:22px;font-weight:500;margin:12px 0 3px;direction:ltr;text-align:left}
+.product .notes{color:var(--muted);font-size:13px;min-height:42px}
+.price{color:var(--gold2);font-size:18px;font-weight:bold;margin-top:auto;padding-top:12px}
+.price small{font-size:12px;color:var(--muted);font-weight:400}
+.product .btn{margin-top:14px;width:100%}
+.builder{margin:60px 0;background:#191814;border:1px solid var(--line);padding:28px}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.step h3{font-size:18px;margin:0 0 12px}
+.step-tag{color:var(--gold);font-size:11px;letter-spacing:2px;direction:ltr;display:block}
+.bottles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.bottle{border:1px solid var(--line);padding:9px;background:#211f1a;color:var(--ink);text-align:center}
+.bottle.selected{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.bottle img{width:100%;height:100px;object-fit:contain;background:#f5f0e7;display:block;margin-bottom:8px}
+.bottle .bname{font-size:12px}
+.bottle .bprice{font-size:12px;color:var(--gold2)}
+.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.field label{font-size:13px;color:var(--muted)}
+input,select,textarea{width:100%;padding:11px 12px;background:#11110f;border:1px solid var(--line);border-radius:3px;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.builder-bottom{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+.summary{background:#11110f;border:1px solid var(--line);padding:18px}
+.summary h3{margin-top:0}
+.total{font-size:28px;color:var(--gold2);font-weight:bold}
+.muted{color:var(--muted);font-size:13px}
+.order-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.admin{display:none;margin:55px 0;padding:25px;background:#191814;border:1px solid var(--gold)}
+.admin.show{display:block}
+.admin h2{font-family:Georgia,serif;font-weight:500}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.admin-list{display:flex;flex-direction:column;gap:8px}
+.admin-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);background:#11110f}
+.admin-item span{font-size:13px}
+.footer{margin-top:70px;border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:12px}
+.footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.toast{position:fixed;bottom:18px;left:18px;background:var(--gold2);color:#17140e;padding:12px 18px;z-index:30;display:none;max-width:90vw}
+.toast.show{display:block}
+.empty{color:var(--muted);padding:18px;border:1px dashed var(--line)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-art{min-height:210px}.steps,.builder-bottom,.admin-grid{grid-template-columns:1fr}.bottles{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:520px){.wrap{padding:0 14px}.nav{align-items:flex-start;padding:15px 0;flex-direction:column}.hero{padding-top:40px}.grid{grid-template-columns:1fr}.product{min-height:190px}.builder{padding:16px}.bottles{grid-template-columns:repeat(2,1fr)}.section-head{align-items:flex-start;flex-direction:column}.brand{font-size:22px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap nav">
+    <div class="brand">OUD & AURA<small>FRAGRANCE STUDIO</small></div>
+    <div class="nav-actions">
+      <button class="btn ghost" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Explore Fragrances</button>
+      <button class="btn" onclick="openAdmin()">Admin Panel</button>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+<section class="hero">
+  <div>
+    <div class="eyebrow">YOUR SCENT. YOUR SIGNATURE.</div>
+    <h1>A SCENT THAT<br><span>MAKES YOU MEMORABLE</span></h1>
+    <p>Choose your fragrance, select a bottle, pick your volume in millilitres, and place your order. Refined scents at an affordable price.</p>
+    <button class="btn" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Explore the Collection ↓</button>
+  </div>
+  <div class="hero-art"><div class="monogram">O&A</div><div class="hero-note">CRAFTED FOR YOUR MOMENTS</div></div>
+</section>
+<section id="collection">
+  <div class="section-head"><div><div class="eyebrow">THE COLLECTION</div><h2>Explore Fragrances</h2></div><p>Prices shown per millilitre</p></div>
+  <div class="filters" id="filters">
+    <button class="chip active" data-cat="all">All</button>
+    <button class="chip" data-cat="Male">Male fragrances</button>
+    <button class="chip" data-cat="Female">Female fragrances</button>
+    <button class="chip" data-cat="Unisex">Unisex</button>
+  </div>
+  <div class="grid" id="products"></div>
+</section>
+<section class="builder" id="builder">
+  <div class="section-head" style="margin-top:0"><div><div class="eyebrow">BUILD YOUR ORDER</div><h2>Build Your Order</h2></div><p>Step 1 — Fragrance, Step 2 — Bottle</p></div>
+  <div class="steps">
+    <div class="step">
+      <span class="step-tag">STEP 01</span><h3>Choose Fragrance & Volume</h3>
+      <div class="field"><label>Fragrance</label><select id="chosenProduct"></select></div>
+      <div class="field"><label>Volume (ml)</label><select id="ml"><option value="10">10 ml</option><option value="20">20 ml</option><option value="30" selected>30 ml</option><option value="50">50 ml</option><option value="100">100 ml</option></select></div>
+      <p class="muted">Select your fragrance and volume to calculate the price.</p>
+    </div>
+    <div class="step">
+      <span class="step-tag">STEP 02</span><h3>Choose Your Bottle</h3>
+      <div class="bottles" id="bottles"></div>
+      <p class="muted">The bottle price is added once per order. Place images named 1.jpg through 7.jpg inside the images folder.</p>
+    </div>
+  </div>
+  <div class="builder-bottom">
+    <div>
+      <span class="step-tag">DELIVERY DETAILS</span><h3>Order Details</h3>
+      <div class="field"><label>Your Name</label><input id="customerName" placeholder="Enter your name"></div>
+      <div class="field"><label>Mobile / WhatsApp Number</label><input id="customerPhone" placeholder="e.g. 03XXXXXXXXX" inputmode="tel"></div>
+      <div class="field"><label>Delivery Address</label><textarea id="customerAddress" rows="3" placeholder="House, street, city"></textarea></div>
+      <div class="field"><label>Additional Notes (optional)</label><textarea id="customerNotes" rows="2" placeholder="Any special instructions"></textarea></div>
+    </div>
+    <div class="summary">
+      <h3>Order Summary</h3><div id="summaryText" class="muted"></div>
+      <div class="total" id="total">Rs. 0</div>
+      <div class="muted">Delivery charges can be confirmed separately.</div>
+      <div class="order-actions"><button class="btn" onclick="sendWhatsApp()">Order via WhatsApp</button><button class="btn ghost" onclick="sendEmail()">Order via Email</button></div>
+      <p class="muted">WhatsApp opens a prepared order message. You must press Send yourself.</p>
+    </div>
+  </div>
+</section>
+<section class="admin" id="admin">
+  <div class="section-head" style="margin-top:0"><div><div class="eyebrow">STORE MANAGEMENT</div><h2>Admin Panel</h2></div><button class="btn ghost small" onclick="closeAdmin()">Close</button></div>
+  <div id="loginBox">
+    <p class="muted">Log in to manage your fragrance products.</p>
+    <div class="field" style="max-width:360px"><label>Admin Password</label><input id="adminPassword" type="password" placeholder="Password"></div>
+    <button class="btn" onclick="loginAdmin()">Log In</button>
+    <p class="muted">Default password: <b>admin123</b>. Change it in the code before publishing.</p>
+  </div>
+  <div id="adminDashboard" style="display:none">
+    <p class="muted">This panel stores changes in this browser's Local Storage only.</p>
+    <div class="admin-grid">
+      <div>
+        <h3>Add / Edit Fragrance</h3><input type="hidden" id="editId">
+        <div class="field"><label>Fragrance Name</label><input id="pName" placeholder="e.g. Amber Dusk"></div>
+        <div class="field"><label>Price per ml (PKR)</label><input id="pPrice" type="number" min="1" placeholder="e.g. 12"></div>
+        <div class="field"><label>Category</label><select id="pCategory"><option>Male</option><option>Female</option><option>Unisex</option></select></div>
+        <div class="field"><label>Short Description / Notes</label><input id="pNotes" placeholder="e.g. oud, amber and woods"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="saveProduct()">Save Product</button><button class="btn ghost" onclick="clearProductForm()">Clear Form</button></div>
+      </div>
+      <div><h3>Your Fragrances</h3><div id="adminProducts" class="admin-list"></div></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div><span class="brand" style="font-size:18px">OUD & AURA</span><p>Find your signature fragrance.</p></div>
+    <div>© <span id="year"></span> OUD & AURA · Fragrance Studio</div>
+    <div>Remember to update your WhatsApp number and email in the code.</div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+<script>
+/* ===== STORE SETTINGS: CHANGE THESE ===== */
+const STORE_WHATSAPP = "+923163753123";
+const STORE_EMAIL = "hassanshuraim15@gmail.com";
+const ADMIN_PASSWORD = "admin123";
+const STORAGE_KEY = "oudAuraProducts_v1";
+
+/* ===== 20 DEFAULT FRAGRANCES ===== */
+const defaultProducts = [
+{id:1,name:"Amber Dusk",price:12,category:"Unisex",notes:"Amber, vanilla and warm woods"},
+{id:2,name:"Velvet Oud",price:18,category:"Male",notes:"Oud, leather and smoky notes"},
+{id:3,name:"Rose Veil",price:14,category:"Female",notes:"Rose, musk and soft florals"},
+{id:4,name:"Citrus Coast",price:10,category:"Unisex",notes:"Citrus and sea breeze"},
+{id:5,name:"Midnight Cedar",price:15,category:"Male",notes:"Cedar, black pepper and amber"},
+{id:6,name:"Pearl Bloom",price:13,category:"Female",notes:"White florals and pear"},
+{id:7,name:"Saffron Smoke",price:20,category:"Unisex",notes:"Saffron, oud and spices"},
+{id:8,name:"Blue Horizon",price:11,category:"Male",notes:"Fresh aquatic and citrus notes"},
+{id:9,name:"Vanilla Muse",price:13,category:"Female",notes:"Vanilla, caramel and musk"},
+{id:10,name:"Musk Atelier",price:16,category:"Unisex",notes:"Clean musk and soft woods"},
+{id:11,name:"Royal Vetiver",price:17,category:"Male",notes:"Vetiver, herbs and woods"},
+{id:12,name:"Cherry Satin",price:15,category:"Female",notes:"Cherry, almond and amber"},
+{id:13,name:"Green Fig",price:12,category:"Unisex",notes:"Fig, green leaves and sandalwood"},
+{id:14,name:"Ironwood",price:14,category:"Male",notes:"Dry woods and spices"},
+{id:15,name:"Jasmine Haze",price:14,category:"Female",notes:"Jasmine and white tea"},
+{id:16,name:"Desert Silk",price:19,category:"Unisex",notes:"Amber, saffron and sandalwood"},
+{id:17,name:"Ocean Slate",price:12,category:"Male",notes:"Marine notes and musk"},
+{id:18,name:"Luna Petals",price:11,category:"Female",notes:"Soft florals and gentle sweetness"},
+{id:19,name:"Cardamom Noir",price:16,category:"Unisex",notes:"Cardamom, black tea and woods"},
+{id:20,name:"Golden Suede",price:18,category:"Male",notes:"Suede, amber and tonka"}
+];
+
+/* ===== BOTTLE OPTIONS ===== */
+const bottleOptions = [
+{id:1,name:"Classic Clear",price:30,img:"images/1.jpg"},
+{id:2,name:"Minimal Glass",price:50,img:"images/2.jpg"},
+{id:3,name:"Signature Black",price:80,img:"images/3.jpg"},
+{id:4,name:"Blue Edition",price:100,img:"images/4.jpg"},
+{id:5,name:"Rose Crystal",price:130,img:"images/5.jpg"},
+{id:6,name:"Amber Luxe",price:160,img:"images/6.jpg"},
+{id:7,name:"Golden Reserve",price:200,img:"images/7.jpg"}
+];
+
+let products = loadProducts();
+let activeCategory = "all";
+let selectedBottle = 1;
+let isLoggedIn = false;
+
+function loadProducts(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(Array.isArray(saved)) return saved;
+  } catch(e){}
+  return defaultProducts.map(p => ({...p}));
+}
+
+function persist(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(products));
+}
+
+function money(n){
+  return "Rs. " + Number(n).toLocaleString("en-PK");
+}
+
+function toast(message){
+  const el = document.getElementById("toast");
+  el.textContent = message;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"),3000);
+}
+
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g,c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
+/* ===== DISPLAY FRAGRANCES ===== */
+function renderProducts(){
+  const root = document.getElementById("products");
+  const shown = products.filter(p =>
+    activeCategory === "all" || p.category === activeCategory
+  );
+
+  root.innerHTML = shown.length
+    ? shown.map((p,i) => `
+      <article class="product">
+        <div class="num">FRAGRANCE / ${String(i+1).padStart(2,"0")}</div>
+        <h3>${esc(p.name)}</h3>
+        <div class="notes">${esc(p.notes || "Signature fragrance")}</div>
+        <div class="price">${money(p.price)} <small>/ ml</small></div>
+        <button class="btn" onclick="chooseProduct(${p.id})">Choose Fragrance</button>
+      </article>
+    `).join("")
+    : '<div class="empty">No fragrances in this category yet.</div>';
+
+  const sel = document.getElementById("chosenProduct");
+  const old = Number(sel.value);
+
+  sel.innerHTML = products.map(p =>
+    `<option value="${p.id}">${esc(p.name)} — ${money(p.price)}/ml</option>`
+  ).join("");
+
+  if(products.some(p => p.id === old)) sel.value = old;
+
+  updateSummary();
+}
+
+function chooseProduct(id){
+  document.getElementById("chosenProduct").value = id;
+  document.getElementById("builder").scrollIntoView({behavior:"smooth"});
+  updateSummary();
+}
+
+/* ===== BOTTLES ===== */
+function renderBottles(){
+  document.getElementById("bottles").innerHTML = bottleOptions.map(b => `
+    <button class="bottle ${selectedBottle === b.id ? "selected" : ""}"
+      onclick="selectBottle(${b.id})">
+      <img src="${b.img}" alt="${esc(b.name)}"
+        onerror="this.style.display='none'">
+      <div class="bname">${esc(b.name)}</div>
+      <div class="bprice">+ ${money(b.price)}</div>
+    </button>
+  `).join("");
+}
+
+function selectBottle(id){
+  selectedBottle = id;
+  renderBottles();
+  updateSummary();
+}
+
+function getChosen(){
+  return products.find(p =>
+    p.id === Number(document.getElementById("chosenProduct").value)
+  ) || products[0];
+}
+
+function getBottle(){
+  return bottleOptions.find(b => b.id === selectedBottle) || bottleOptions[0];
+}
+
+/* ===== PRICE CALCULATION ===== */
+function updateSummary(){
+  const summary = document.getElementById("summaryText");
+  const totalEl = document.getElementById("total");
+
+  if(!products.length){
+    summary.textContent = "Please add a fragrance from the Admin Panel.";
+    totalEl.textContent = money(0);
+    return;
+  }
+
+  const p = getChosen();
+  const b = getBottle();
+  const ml = Number(document.getElementById("ml").value || 30);
+  const subtotal = p.price * ml;
+  const total = subtotal + b.price;
+
+  summary.innerHTML = `
+    Fragrance: <b>${esc(p.name)}</b><br>
+    Volume: ${ml} ml × ${money(p.price)} = ${money(subtotal)}<br>
+    Bottle: ${esc(b.name)} (${money(b.price)})
+  `;
+
+  totalEl.textContent = money(total);
+}
+
+/* ===== ORDER MESSAGE ===== */
+function orderText(){
+  if(!products.length){
+    toast("Please add a fragrance first.");
+    return null;
+  }
+
+  const p = getChosen();
+  const b = getBottle();
+  const ml = Number(document.getElementById("ml").value || 30);
+  const total = p.price * ml + b.price;
+
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("customerPhone").value.trim();
+  const address = document.getElementById("customerAddress").value.trim();
+  const notes = document.getElementById("customerNotes").value.trim();
+
+  if(!name || !phone || !address){
+    toast("Please enter your name, mobile number, and address.");
+    return null;
+  }
+
+  return `OUD & AURA — New Order
+
+Customer: ${name}
+Mobile / WhatsApp: ${phone}
+Delivery Address: ${address}
+
+Fragrance: ${p.name}
+Category: ${p.category}
+Volume: ${ml} ml
+Price per ml: ${money(p.price)}
+Bottle: ${b.name} (${money(b.price)})
+
+Total: ${money(total)}
+Additional Notes: ${notes || "None"}
+
+Please confirm order availability and delivery.`;
+}
+
+function sendWhatsApp(){
+  const msg = orderText();
+  if(!msg) return;
+
+  if(!STORE_WHATSAPP || STORE_WHATSAPP === "923001234567"){
+    toast("Please add your WhatsApp number in the code first.");
+    return;
+  }
+
+  window.open(
+    "https://wa.me/" + STORE_WHATSAPP + "?text=" + encodeURIComponent(msg),
+    "_blank"
+  );
+}
+
+function sendEmail(){
+  const msg = orderText();
+  if(!msg) return;
+
+  if(!STORE_EMAIL || STORE_EMAIL === "yourstore@example.com"){
+    toast("Please add your email address in the code first.");
+    return;
+  }
+
+  window.location.href =
+    "mailto:" + STORE_EMAIL +
+    "?subject=" + encodeURIComponent("OUD & AURA — New Order") +
+    "&body=" + encodeURIComponent(msg);
+}
+
+/* ===== ADMIN PANEL ===== */
+function openAdmin(){
+  document.getElementById("admin").classList.add("show");
+  document.getElementById("admin").scrollIntoView({behavior:"smooth"});
+}
+
+function closeAdmin(){
+  document.getElementById("admin").classList.remove("show");
+}
+
+function loginAdmin(){
+  if(document.getElementById("adminPassword").value !== ADMIN_PASSWORD){
+    toast("Incorrect password.");
+    return;
+  }
+
+  isLoggedIn = true;
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("adminDashboard").style.display = "block";
+  renderAdmin();
+}
+
+function renderAdmin(){
+  document.getElementById("adminProducts").innerHTML = products.length
+    ? products.map(p => `
+      <div class="admin-item">
+        <span>
+          <b>${esc(p.name)}</b><br>
+          ${esc(p.category)} · ${money(p.price)}/ml
+        </span>
+        <span style="display:flex;gap:6px">
+          <button class="btn ghost small" onclick="editProduct(${p.id})">Edit</button>
+          <button class="btn ghost small" onclick="deleteProduct(${p.id})">Delete</button>
+        </span>
+      </div>
+    `).join("")
+    : '<div class="empty">No products yet.</div>';
+}
+
+function saveProduct(){
+  if(!isLoggedIn) return;
+
+  const name = document.getElementById("pName").value.trim();
+  const price = Number(document.getElementById("pPrice").value);
+  const category = document.getElementById("pCategory").value;
+  const notes = document.getElementById("pNotes").value.trim();
+  const id = Number(document.getElementById("editId").value);
+
+  if(!name || !Number.isFinite(price) || price <= 0){
+    toast("Enter a name and a valid price.");
+    return;
+  }
+
+  if(id){
+    products = products.map(p =>
+      p.id === id ? {...p,name,price,category,notes} : p
+    );
+    toast("Product updated.");
+  } else {
+    products.push({id:Date.now(),name,price,category,notes});
+    toast("Product added.");
+  }
+
+  persist();
+  clearProductForm();
+  renderProducts();
+  renderAdmin();
+}
+
+function editProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+
+  document.getElementById("editId").value = p.id;
+  document.getElementById("pName").value = p.name;
+  document.getElementById("pPrice").value = p.price;
+  document.getElementById("pCategory").value = p.category;
+  document.getElementById("pNotes").value = p.notes || "";
+  document.getElementById("pName").focus();
+}
+
+function deleteProduct(id){
+  if(!confirm("Are you sure you want to delete this fragrance?")) return;
+
+  products = products.filter(p => p.id !== id);
+  persist();
+  renderProducts();
+  renderAdmin();
+  toast("Product deleted.");
+}
+
+function clearProductForm(){
+  ["editId","pName","pPrice","pNotes"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+  document.getElementById("pCategory").value = "Male";
+}
+
+/* ===== FILTERS AND INITIAL SETUP ===== */
+document.querySelectorAll("#filters .chip").forEach(btn => {
+  btn.addEventListener("click",() => {
+    document.querySelectorAll("#filters .chip").forEach(x =>
+      x.classList.remove("active")
+    );
+    btn.classList.add("active");
+    activeCategory = btn.dataset.cat;
+    renderProducts();
+  });
+});
+
+document.getElementById("chosenProduct").addEventListener("change",updateSummary);
+document.getElementById("ml").addEventListener("change",updateSummary);
+document.getElementById("year").textContent = new Date().getFullYear();
+
+renderProducts();
+renderBottles();
+updateSummary();
+</script>
+</body>
+</html>
